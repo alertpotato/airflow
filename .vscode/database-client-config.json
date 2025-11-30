@@ -1,0 +1,44 @@
+{
+    "database": {
+        "1722670561368": {
+            "host": "airflow-db",
+            "port": 5432,
+            "user": "airflow",
+            "password": "will_be_replaced_by_stars",
+            "dbType": "PostgreSQL",
+            "database": "postgres",
+            "advance": {
+                "hideSystemSchema": true,
+                "groupingTables": false
+            },
+            "treeFeatures": [],
+            "timezone": "+00:00",
+            "usingSSH": false,
+            "useSocksProxy": false,
+            "useHTTPProxy": false,
+            "athena": {},
+            "bigQuery": {},
+            "global": true,
+            "savePassword": "Forever",
+            "readonly": false,
+            "sort": 11,
+            "useSSL": false,
+            "fs": {
+                "encoding": "utf8",
+                "showHidden": true
+            },
+            "dm": {
+                "usingServiceName": false
+            },
+            "httpAuth": {
+                "authType": "none"
+            },
+            "key": "1722670561368",
+            "connectionKey": "database.connections",
+            "isJdbc": false,
+            "requiredAuth": true
+        }
+    },
+    "nosql": null,
+    "$schema": "https://cdn.database-client.com/dbclient/schema.json"
+}

@@ -1,0 +1,54 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.202.3/containers/python-3
+{
+	"name": "Airflow",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "webserver",
+	"workspaceFolder": "/opt/airflow",
+	"shutdownAction": "none",
+	"containerEnv": {
+		// для выключения мешающих подсказок в консоли 
+		"DOCKER_CLI_HINTS": "false"
+		// Раскомментить для загрузки примеров
+		// "AIRFLOW__CORE__LOAD_EXAMPLES": "True"
+	},
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				"njpwerner.autodocstring",
+				"mhutchie.git-graph",
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-pg",
+				"redhat.vscode-yaml",
+				"JannisX11.batch-rename-extension",
+				"t-akasaki.git-skip-worktree-manager",
+				"mutantdino.resourcemonitor"
+			]
+		}
+	},
+	"forwardPorts": [
+		8080
+	],
+	// Use 'portsAttributes' to set default properties for specific forwarded ports. More info: https://code.visualstudio.com/docs/remote/devcontainerjson-reference.
+	"portsAttributes": {
+		"8080": {
+			"label": "Airflow",
+			"onAutoForward": "notify",
+			"protocol": "http"
+		}
+	},
+	"otherPortsAttributes": {
+		"onAutoForward": "silent"
+	},
+	"postCreateCommand": "bash .devcontainer/setup_scripts/post_create.sh",
+	"postStartCommand": "install -m 644 -o airflow -g root /dev/null /opt/airflow/airflow-webserver.pid"
+	// DEBUG
+	// "overrideCommand": true,
+	// "postStartCommand": "/bin/bash"
+}

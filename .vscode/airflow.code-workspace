@@ -1,0 +1,137 @@
+{
+	"folders": [
+		{
+			"path": "/opt/airflow"
+		},
+		{
+			"path": "/opt/airflow/_ext_repos/SQL_REPO"
+		},
+		{
+			"path": "/opt/airflow/_ext_repos/DQ_REPO"
+		}
+	],
+	"settings": {
+		// ------------------------------- VS Code -------------------------------:
+		// тут продублирован конфиг .vscode/settings.json из-за особенностей чтения конфигов
+		// ------------------------------- Python -------------------------------:
+		"python.defaultInterpreterPath": "/usr/local/bin/python",
+		"python.analysis.autoFormatStrings": true,
+		"[python]": {
+			"diffEditor.ignoreTrimWhitespace": false,
+			"gitlens.codeLens.symbolScopes": [
+				"!Module"
+			],
+			"editor.defaultFormatter": "charliermarsh.ruff",
+			"editor.formatOnSave": true,
+			"editor.formatOnSaveMode": "modificationsIfAvailable",
+			"editor.formatOnType": false,
+			"editor.wordBasedSuggestions": "off",
+		},
+		// ------------------------------- YAML -------------------------------:
+		"yaml.format.printWidth": 250, // длина для строк в yaml файле до авто-переноса,
+		"[yaml]": {
+			"editor.detectIndentation": false,
+			"editor.defaultFormatter": "redhat.vscode-yaml",
+			"editor.insertSpaces": true,
+			"editor.tabSize": 2,
+			"diffEditor.ignoreTrimWhitespace": false,
+			"editor.quickSuggestions": {
+				"other": true,
+				"comments": false,
+				"strings": true
+			}
+		},
+		"yaml.yamlVersion": "1.1",
+		"yaml.schemas": {
+			".vscode/yaml-dag-schema.json": "SQL_REPO/**/*.yaml"
+		},
+		"yaml.customTags": [
+			"!parallel scalar",
+			"!sequential scalar",
+		],
+		"editor.tokenColorCustomizations": { // цвета тегов
+			"[Default Dark Modern]": {
+				"textMateRules": [
+					{
+						"scope": "storage.type.tag-handle.yaml",
+						"settings": {
+							"fontStyle": "underline",
+							"foreground": "#9856d6",
+						}
+					}
+				]
+			},
+			"[Default Light Modern]": {
+				"textMateRules": [
+					{
+						"scope": "storage.type.tag-handle.yaml",
+						"settings": {
+							"fontStyle": "underline",
+							"foreground": "#5c0080",
+						}
+					}
+				]
+			}
+		},
+		// ------------------------------- others -------------------------------:
+		// "debugpy.debugJustMyCode": false,
+		"debug.allowBreakpointsEverywhere": true,
+		"remote.restoreForwardedPorts": false,
+		"terminal.integrated.gpuAcceleration": "off",
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+				"path": "/bin/bash"
+			}
+		},
+		"git.inputValidation": true,
+		"files.watcherExclude": {
+			"**/.git/objects/**": true,
+			"**/.git/subtree-cache/**": true,
+			"**/node_modules/*/**": true,
+			"**/.hg/store/**": true,
+			"**/logs/**": true,
+			"**/.devcontainer/.vscode-server": true,
+			"**/.devcontainer/cache": true
+		},
+		// "search.useIgnoreFiles": true,
+		"search.exclude": {
+			"dags/archive/": true,
+			"**/__pycache__/": true,
+			"**/node_modules": true,
+			"**/bower_components": true,
+			"**/*.code-search": true,
+			"**/logs/**": true,
+			"**/.devcontainer/.vscode-server": true,
+			"**/.devcontainer/cache": true
+		},
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Удалить все слитые ветки (merged) во всех репозиториях этого контейнера",
+				"detail": "Репы: основная, SQL, DQ (задаются в скрипте). Переключает во всех репах на основную ветку (например master), удаляет все ветки, которые уже были слиты в основную.",
+				"isBackground": false,
+				"type": "shell",
+				"command": "python .vscode/task_scripts/clean_merged_all_repos.py ${workspaceFolder}",
+				"options": {
+					"cwd": "${workspaceFolder}"
+				},
+				"presentation": {
+					"echo": true,
+					"reveal": "silent",
+					"focus": true,
+					"panel": "shared",
+					"showReuseMessage": true,
+					"clear": false
+				},
+				"problemMatcher": {
+					"pattern": {
+						"regexp": "^(?:fatal|error|Traceback)(.+):\\S*$",
+						"message": 1
+					}
+				}
+			},
+		]
+	}
+}
