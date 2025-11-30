@@ -1,6 +1,0 @@
-db
-dev
-venv
-logs
-**/__pycache__/
-**.log
