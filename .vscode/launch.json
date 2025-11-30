@@ -1,0 +1,146 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            /* Отладка простого python файла. Никаких особых настроек для airflow */
+            "name": "Python file",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "presentation": {
+                "hidden": false,
+                "group": "2-python-files",
+                "order": 1
+            },
+            "justMyCode": false,
+        },
+        {
+            /* Отладка python файла. Подходит для отладки генерации дага, не подходит для отладки задач.
+            для этого способа в конце файла дописываем (mydag - наш DAG)
+            
+            if __name__ == "__main__":
+                mydag.run(run_at_least_once=True)
+            */
+            "name": "File-DAG",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "preLaunchTask": "remove backfills",
+            "postDebugTask": "remove backfills",
+            "env": {
+                "AIRFLOW__CORE__EXECUTOR": "DebugExecutor",
+                "AIRFLOW__DEBUG__FAIL_FAST": "True",
+            },
+            "presentation": {
+                "hidden": false,
+                "group": "1-dag",
+                "order": 3
+            }
+        },
+        {
+            /* Отладка DAG'а. Перед запуском загружает все DAG'и инстанса airflow (!)
+            для этого метода имя файла должно совпадать с dag_id
+            */
+            "name": "DAG",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "~/.local/bin/airflow",
+            "console": "integratedTerminal",
+            "preLaunchTask": "remove backfills",
+            "postDebugTask": "remove backfills",
+            "justMyCode": false,
+            "env": {
+                "AIRFLOW__DEBUG__FAIL_FAST": "True",
+                "AIRFLOW__CORE__EXECUTOR": "DebugExecutor",
+                "AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT": "900",
+                // "AIRFLOW__CORE__EXECUTOR": "SequentialExecutor"
+            },
+            "args": [
+                "dags",
+                "test",
+                // "-c",
+                // "{\"etl_proc_id\": -123}",
+                "${fileBasenameNoExtension}",
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "1-dag",
+                "order": 1
+            }
+        },
+        {
+            /* Отладка одного task DAG'а. Перед запуском загружает все DAG'и инстанса airflow (!)
+            для этого метода нужно ввести task_id
+            */
+            "name": "Task",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "~/.local/bin/airflow",
+            "console": "integratedTerminal",
+            "preLaunchTask": "remove backfills",
+            "postDebugTask": "remove backfills",
+            "justMyCode": false,
+            "env": {
+                "AIRFLOW__DEBUG__FAIL_FAST": "True",
+                "AIRFLOW__CORE__EXECUTOR": "DebugExecutor",
+                // "AIRFLOW__CORE__EXECUTOR": "SequentialExecutor"
+            },
+            "args": [
+                "tasks",
+                "test",
+                "-m",
+                "${fileBasenameNoExtension}",
+                "${input:taskId}"
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "1-dag",
+                "order": 2
+            }
+        },
+        {
+            /* Отладка чтения всех DAG (airflow dags reserialize) */
+            "name": "Filling the DagBag",
+            "type": "debugpy",
+            "request": "launch",
+            "program": ".vscode/task_scripts/debug_dagbag.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT": "900",
+            },
+            "presentation": {
+                "hidden": false,
+                "group": "1-dag",
+                "order": 3
+            }
+        },
+        {
+            "name": "Bash-Debug",
+            "type": "bashdb",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "program": "${file}",
+            "args": [],
+            "presentation": {
+                "hidden": false,
+                "group": "3-bash",
+                "order": 1,
+            }
+        },
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "taskId",
+            "description": "task_id для запуска",
+            "default": ""
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+# настройки git под VS code
+# https://code.visualstudio.com/docs/sourcecontrol/overview#_vs-code-as-git-editor
+
+[diff]
+    tool = default-difftool
+[difftool "default-difftool"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+  tool = code
+[mergetool "code"]
+  cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
+[safe]
+	directory = /opt/airflow
